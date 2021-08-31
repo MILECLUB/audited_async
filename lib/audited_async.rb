@@ -84,6 +84,7 @@ module Audited::Auditor::AuditedInstanceMethods
                                record_id: send(self.class.primary_key.to_sym),
                                action: method,
                                audited_changes: (changes || audited_attributes).to_json,
-                               comment: audit_comment
+                               comment: audit_comment,
+                               created_at: DateTime.current.to_i
   end
 end

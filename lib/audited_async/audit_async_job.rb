@@ -10,7 +10,10 @@ class AuditedAsync::AuditAsyncJob < ActiveJob::Base
 
     return alert_record_not_found(klass, id) unless record
 
-    record.send(:write_audit, changes)
+    audit = record.send(:write_audit, changes)
+    if changes[:created_at]
+      audit.update_columns(created_at: DateTime.strptime(changes[:created_at].to_s, "%s").in_time_zone)
+    end
   end
 
   private

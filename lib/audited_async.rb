@@ -77,6 +77,8 @@ module Audited::Auditor::AuditedInstanceMethods
   end
 
   def perform_async_audit(method, changes = nil)
+    audit_user = ::Audited.store[:current_user].try!(:call)
+    audit_user_id = audit_user.try(:id)
     AuditedAsync.config
                 .job
                 .set(AuditedAsync.config.job_options)
@@ -85,6 +87,9 @@ module Audited::Auditor::AuditedInstanceMethods
                                action: method,
                                audited_changes: (changes || audited_attributes).to_json,
                                comment: audit_comment,
+                               user_id: audit_user_id,
+                               user_type: "User",
+                               remote_address: ::Audited.store[:current_remote_address] || nil,
                                created_at: DateTime.current.to_i
   end
 end

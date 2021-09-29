@@ -19,7 +19,7 @@ class AuditedAsync::AuditAsyncJob < ActiveJob::Base
   private
 
   def extract_auditing_elements(args)
-    return [args[:class_name].safe_constantize, args[:record_id], extract_audit_changes(args)]
+    [args[:class_name].safe_constantize, args[:record_id], extract_audit_changes(args)]
   end
 
   def extract_audit_changes(args)
